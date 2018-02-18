@@ -2,7 +2,7 @@
 Blender addon to make a solid object (1 mesh) from group of selected objects.
 Similar function like in Meshmixer.
 
-### Features
+### More info
 
 To get proper results selected objects should:
 
@@ -11,16 +11,16 @@ To get proper results selected objects should:
 * not include self-intersecting meshes.
 
 Example 1:
-* selected meshes before:
-<img src="https://raw.githubusercontent.com/agapas/make-solid/master/images/1_before.png" width="1000" height="380"/>
-*  the final mesh:
-<img src="https://raw.githubusercontent.com/agapas/make-solid/master/images/1_after.png" width="1000" height="380"/>
+* before:
+<img src="https://raw.githubusercontent.com/agapas/make-solid/master/images/1_before.png" width="850" height="450"/>
+* after:
+<img src="https://raw.githubusercontent.com/agapas/make-solid/master/images/1_after.png" width="850" height="450"/>
 
 Example 2:
-* selected meshes before:
-<img src="https://raw.githubusercontent.com/agapas/make-solid/master/images/2_before.png" width="1000" height="380"/>
-* the final mesh:
-<img src="https://raw.githubusercontent.com/agapas/make-solid/master/images/2_after.png" width="1000" height="380"/>
+* before:
+<img src="https://raw.githubusercontent.com/agapas/make-solid/master/images/2_before.png" width="850" height="450"/>
+* after:
+<img src="https://raw.githubusercontent.com/agapas/make-solid/master/images/2_after.png" width="850" height="450"/>
 
 
 ### Installing
