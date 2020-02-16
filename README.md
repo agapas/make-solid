@@ -3,7 +3,8 @@ Blender addon to make a solid object (1 mesh) from group of selected objects.
 Similar function to Meshmixer's make solid.
 
 ### Blender version:
-Made and tested on Blender 2.81 (windows64).
+Made and tested on Blender 2.81 (windows64). If you need version for Blender 2.79 or older, check the link: [make-solid-blender2.79](https://github.com/agapas/make-solid-blender2.79)
+
 
 ### More info
 
