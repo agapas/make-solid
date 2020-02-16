@@ -21,9 +21,9 @@
 bl_info = {
 	'name': 'Make Solid',
 	'author': 'Agnieszka Pas',
-	'version': (1, 0, 0),
-	'blender': (2, 78, 0),
-	'location': 'View3D > Tools Panel > Tools Tab',
+	'version': (2, 0, 0),
+	'blender': (2, 81, 0),
+	'location': 'Properties > Window > Object',
 	'description': 'Make non manifold object for 3d print',
 	'wiki_url': 'https://github.com/agapas/make-solid#readme',
 	'category': 'Object',
@@ -32,7 +32,11 @@ bl_info = {
 
 import bpy
 import bmesh
-from bpy.types import Operator, Panel
+from bpy.types import (
+	Operator,
+	Panel,
+	)
+from bl_ui.properties_object import ObjectButtonsPanel
 
 
 def prepare_meshes():
@@ -54,9 +58,10 @@ def prepare_meshes():
 
 def prepare_mesh(obj, select_action):
 	scene = bpy.context.scene
+	layer = bpy.context.view_layer
 
-	active_object = bpy.context.active_object
-	scene.objects.active = obj
+	active_object = layer.objects.active
+	layer.objects.active = obj
 	bpy.ops.object.mode_set(mode='EDIT')
 
 	# reveal hidden vertices in mesh
@@ -79,7 +84,7 @@ def prepare_mesh(obj, select_action):
 	# back to previous settings
 	bpy.ops.mesh.select_all(action=select_action)
 	bpy.ops.object.mode_set(mode='OBJECT')
-	scene.objects.active = active_object
+	layer.objects.active = active_object
 
 
 def cleanup_mesh(obj):
@@ -92,7 +97,7 @@ def cleanup_mesh(obj):
 
 
 def add_modifier(active, selected):
-	bool_modifier = active.modifiers.new('Boolean', 'BOOLEAN')
+	bool_modifier = active.modifiers.new(name='Boolean', type='BOOLEAN')
 	bool_modifier.object = selected
 	bool_modifier.show_viewport = False
 	bool_modifier.show_render = False
@@ -104,13 +109,18 @@ def add_modifier(active, selected):
 
 	bpy.ops.object.modifier_apply(modifier='Boolean')
 
-	bpy.context.scene.objects.unlink(selected)
+	view_layer = bpy.context.view_layer
+	layer_collection = bpy.context.layer_collection or view_layer.active_layer_collection
+	collection = layer_collection.collection
+	collection.objects.unlink(selected)
+
 	bpy.data.objects.remove(selected)
 
 
 def make_solid_batch():
 	active = bpy.context.active_object
 	selected = bpy.context.selected_objects
+
 	selected.remove(active)
 
 	prepare_mesh(active, 'DESELECT')
@@ -129,14 +139,14 @@ def is_manifold(self):
 	for edge in bm.edges:
 		if not edge.is_manifold:
 			bm.free()
-			self.report({'ERROR'}, 'Boolean operation result is non-manifold')
+			self.report({'ERROR'}, "Boolean operation result is non-manifold")
 			return False
 
 	bm.free()
 	return True
 
 
-class MakeSolidOperator(Operator):
+class OBP_OT_MakeSolidOperator(Operator):
 	"""Boolean Union on all selected objects"""
 	bl_idname = "object.make_solid"
 	bl_label = "Make Solid"
@@ -145,8 +155,9 @@ class MakeSolidOperator(Operator):
 	mode = 'UNION'
 
 	def execute(self, context):
-		active = context.active_object
-		selected = context.selected_objects
+		layer_objects = bpy.context.view_layer.objects
+		active = layer_objects.active
+		selected = layer_objects.selected
 
 		if active is None or len(selected) < 2:
 			self.report({'WARNING'}, "Select at least 2 objects")
@@ -159,27 +170,32 @@ class MakeSolidOperator(Operator):
 		return {'FINISHED'}
 
 
-class MakeSolidPanel(Panel):
-	bl_space_type = 'VIEW_3D'
-	bl_region_type = 'TOOLS'
+class OBP_PT_MakeSolidPanel(ObjectButtonsPanel, Panel):
+	bl_idname = "OBP_PT_MakeSolidPanel"
 	bl_label = "Make Solid"
-	bl_context = "objectmode"
-	bl_category = "Tools"
+	bl_options = {'DEFAULT_CLOSED'}
+	bl_order = 11
 
 	def draw(self, context):
 		layout = self.layout
 		col = layout.column()
 		row = col.row()
-		row.operator("object.make_solid", "Make Solid")
+		row.operator("object.make_solid", text="Combine Objects")
 
+classes = (
+	OBP_PT_MakeSolidPanel,
+	OBP_OT_MakeSolidOperator,
+	)
 
 def register():
-	bpy.utils.register_module(__name__)
+	for cls in classes:
+		bpy.utils.register_class(cls)
 
 
 def unregister():
-	bpy.utils.unregister_module(__name__)
+	for cls in classes:
+		bpy.utils.unregister_class(cls)
 
 
-if __name__ == "__main__":
-	register()
+# if __name__ == "__main__":
+# 	register()

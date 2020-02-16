@@ -2,6 +2,9 @@
 Blender addon to make a solid object (1 mesh) from group of selected objects.
 Similar function to Meshmixer's make solid.
 
+### Blender version:
+Made and tested on Blender 2.81 (windows64).
+
 ### More info
 
 To get proper results selected objects should:
@@ -10,19 +13,19 @@ To get proper results selected objects should:
 * intersect each other
 * not include self-intersecting meshes.
 
-Example 1:
+Example - solid objects view:
 * before:
-<img src="https://raw.githubusercontent.com/agapas/make-solid/master/images/1_before.png" width="850" height="450"/>
+<img src="https://raw.githubusercontent.com/agapas/make-solid/master/images/before.png" width="850" height="450"/>
 
 * after:
-<img src="https://raw.githubusercontent.com/agapas/make-solid/master/images/1_after.png" width="850" height="450"/>
+<img src="https://raw.githubusercontent.com/agapas/make-solid/master/images/after.png" width="850" height="450"/>
 
-Example 2:
+Example - wireframe view:
 * before:
-<img src="https://raw.githubusercontent.com/agapas/make-solid/master/images/2_before.png" width="850" height="450"/>
+<img src="https://raw.githubusercontent.com/agapas/make-solid/master/images/before_wireframe.png" width="850" height="450"/>
 
 * after:
-<img src="https://raw.githubusercontent.com/agapas/make-solid/master/images/2_after.png" width="850" height="450"/>
+<img src="https://raw.githubusercontent.com/agapas/make-solid/master/images/after_wireframe.png" width="850" height="450"/>
 
 
 ### Installing
